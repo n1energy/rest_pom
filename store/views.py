@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import  IsAuthenticatedOrReadOnly
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.mixins import UpdateModelMixin
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 
-from store.models import Book
+from store.models import Book, RelationUserBook
 from store.permissions import IsMasterOrReadOnly
-from store.serializers import BooksSerializer
+from store.serializers import BooksSerializer, RelationUserBookSerializer
 
 
 class BookViewSet(ModelViewSet):
@@ -26,6 +27,12 @@ class BookViewSet(ModelViewSet):
 def auth(request):
     return render(request, 'oauth.html')
 
-class UserBookRelationView(
-    
-):
+class UserBookRelationView(UpdateModelMixin, GenericViewSet):
+    permission_classes = [IsAuthenticated]
+    queryset = RelationUserBook.objects.all()
+    serializer_class = RelationUserBookSerializer
+    lookup_field = 'book'
+
+    def get_object(self):
+        obj, _ = RelationUserBook.objects.get_or_create(user=self.request.user, book_id=self.kwargs['book'])
+        return obj

@@ -19,8 +19,8 @@ class RelationUserBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
     like = models.BooleanField(default=False)
     bookmark = models.BooleanField(default=False)
-    rating = models.PositiveSmallIntegerField(choices=RATING_COICES)
-
+    rating = models.PositiveSmallIntegerField(choices=RATING_COICES, null=True)
+    review = models.CharField(max_length=256, default=False, null=True)
 
     def __str__(self):
         return f'{self.user.username}: {self.book.name}, Rate:{self.rating}'
