@@ -1,4 +1,4 @@
-RATING_COICES = (
+RATING_CHOICES = (
         (1, 'Ok'),
         (2, 'Fine'),
         (3, 'Good'),

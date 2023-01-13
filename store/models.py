@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from store.choices import RATING_COICES
+from store.choices import RATING_CHOICES
 
 
 class Book(models.Model):
@@ -19,7 +19,7 @@ class RelationUserBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
     like = models.BooleanField(default=False)
     bookmark = models.BooleanField(default=False)
-    rating = models.PositiveSmallIntegerField(choices=RATING_COICES, null=True)
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, null=True)
     review = models.CharField(max_length=256, default=False, null=True)
 
     def __str__(self):
