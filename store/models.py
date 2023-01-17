@@ -7,6 +7,7 @@ from store.choices import RATING_CHOICES
 class Book(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=7, decimal_places=2)
+    discount = models.DecimalField(max_digits=7, decimal_places=2, default=0)
     author = models.CharField(max_length=255, default='')
     master = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='slave_books')
     readers = models.ManyToManyField(User, through='RelationUserBook', related_name='reader_books')
