@@ -39,12 +39,12 @@ class BooksApiTestCase(APITestCase):
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
             master_name=F('master__username'),
-        ).order_by('id')
+        )
         serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(serializer_data, response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
-        self.assertEqual(serializer_data[0]['rating'], '5.00')
-        self.assertEqual(serializer_data[0]['annotated_likes'], 1)
+        self.assertEqual(serializer_data[1]['rating'], '5.00')
+        self.assertEqual(serializer_data[1]['annotated_likes'], 1)
         self.assertEqual(serializer_data[0]['annotated_bookmarks'], 0)
 
     def test_get_pk(self):
@@ -88,6 +88,7 @@ class BooksApiTestCase(APITestCase):
             min_rating=Min('relationuserbook__rating'),
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
+            master_name=F('master__username'),
         ).order_by('id')
         response = self.client.get(url, data={'price': 200})
         serializer_data = BooksSerializer(books, many=True).data
@@ -104,7 +105,7 @@ class BooksApiTestCase(APITestCase):
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
             master_name=F('master__username'),
-        ).order_by('id')
+        ).order_by('price')
         response = self.client.get(url, data={'ordering': 'price'})
         serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(serializer_data, response.data)
