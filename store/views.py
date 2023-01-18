@@ -19,7 +19,8 @@ class BookViewSet(ModelViewSet):
             min_rating=Min('relationuserbook__rating'),
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
-    ).select_related('master').prefetch_related('readers').order_by('id')
+            master_name=F('master__username'),
+        ).prefetch_related('readers')
     serializer_class = BooksSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     permission_classes = [IsMasterOrReadOnly]

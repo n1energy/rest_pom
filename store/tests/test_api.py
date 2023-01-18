@@ -38,6 +38,7 @@ class BooksApiTestCase(APITestCase):
             min_rating=Min('relationuserbook__rating'),
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
+            master_name=F('master__username'),
         ).order_by('id')
         serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(serializer_data, response.data)
@@ -56,7 +57,8 @@ class BooksApiTestCase(APITestCase):
             min_rating=Min('relationuserbook__rating'),
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
-        ).order_by('id')
+            master_name=F('master__username'),
+            ).order_by('id')
         serializer_data = BooksSerializer(books, many=True).data[0]
         self.assertEqual(serializer_data, response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
@@ -70,6 +72,7 @@ class BooksApiTestCase(APITestCase):
             min_rating=Min('relationuserbook__rating'),
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
+            master_name=F('master__username'),
         ).order_by('id')
         response = self.client.get(url, data={'search': 'Author_1'})
         serializer_data = BooksSerializer(books, many=True).data
@@ -100,7 +103,8 @@ class BooksApiTestCase(APITestCase):
             min_rating=Min('relationuserbook__rating'),
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
-        ).order_by('price')
+            master_name=F('master__username'),
+        ).order_by('id')
         response = self.client.get(url, data={'ordering': 'price'})
         serializer_data = BooksSerializer(books, many=True).data
         self.assertEqual(serializer_data, response.data)
@@ -218,7 +222,6 @@ class RelationBookTestCase(APITestCase):
         response = self.client.patch(url, data=json_data, content_type='application/json')
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         relation = RelationUserBook.objects.get(user=self.user, book=self.book_1.id)
-        print(relation)
         self.assertEqual(5, relation.rating)
 
     def test_rating_wrong(self):

@@ -17,7 +17,7 @@ class BooksSerializer(ModelSerializer):
     rating = serializers.DecimalField(max_digits=3, decimal_places=2, read_only=True)
     max_rating = serializers.IntegerField(read_only=True)
     min_rating = serializers.IntegerField(read_only=True)
-    master_name = serializers.CharField(source='master.username', default='', read_only=True)
+    master_name = serializers.CharField(read_only=True)
     readers = ReadersSerializer(many=True, read_only=True)
     price_after_discount = serializers.DecimalField(max_digits=7, decimal_places=2, read_only=True)
 

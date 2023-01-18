@@ -46,6 +46,7 @@ class SerializersTestCase(TestCase):
             min_rating=Min('relationuserbook__rating'),
             max_rating=Max('relationuserbook__rating'),
             price_after_discount=F('price') - F('discount'),
+            master_name=F('master__username'),
             ).order_by('id')
         data = BooksSerializer(books, many=True).data
         expected_data = [
@@ -87,7 +88,7 @@ class SerializersTestCase(TestCase):
                 'rating': None,
                 'max_rating': None,
                 'min_rating': None,
-                'master_name': '',
+                'master_name': None,
                 'readers': [],
             },
             {
@@ -101,9 +102,8 @@ class SerializersTestCase(TestCase):
                 'rating': None,
                 'max_rating': None,
                 'min_rating': None,
-                'master_name': '',
+                'master_name': None,
                 'readers': [],
             }
         ]
-        print(data)
         self.assertEqual(data, expected_data)
